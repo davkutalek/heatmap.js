@@ -6,9 +6,9 @@
  * and the Beerware (http://en.wikipedia.org/wiki/Beerware) license.
  */
 
-(function(w){
+(function(w) {
     // the heatmapFactory creates heatmap instances
-    var heatmapFactory = (function(){
+    var heatmapFactory = (function() {
 
     // store object constructor
     // a heatmap contains a store
@@ -38,17 +38,17 @@
         // function for adding datapoints to the store
         // datapoints are usually defined by x and y but could also contain a third parameter which represents the occurrence
         addDataPoint: function(x, y){
-            if(x < 0 || y < 0)
+            if (x < 0 || y < 0)
                 return;
 
-            var me = this,
-                heatmap = me.get("heatmap"),
-                data = me.get("data");
+            var me = this;
+            var heatmap = me.get("heatmap");
+            var data = me.get("data");
 
-            if(!data[x])
+            if (!data[x])
                 data[x] = [];
 
-            if(!data[x][y])
+            if (!data[x][y])
                 data[x][y] = 0;
 
             // if count parameter is set increment by count otherwise by 1
@@ -56,7 +56,7 @@
 
             me.set("data", data);
             // do we have a new maximum?
-            if(me.max < data[x][y]){
+            if (me.max < data[x][y]) {
 
                 me.max = data[x][y];
                 // max changed, we need to redraw all existing(lower) datapoints
@@ -72,27 +72,27 @@
             }
             heatmap.drawAlpha(x, y, data[x][y]);
         },
+        
         setDataSet: function(obj){
-
-            var me = this,
-                heatmap = me.get("heatmap"),
-                data = [],
-                d = obj.data,
-                dlen = d.length;
+            var me = this;
+			var heatmap = me.get("heatmap");
+			var data = [];
+			var d = obj.data;
+			var dlen = d.length;
             // clear the heatmap before the data set gets drawn
             heatmap.clear();
             this.max = obj.max;
 
-            while(dlen--){
+            while (dlen--) {
                 var point = d[dlen];
                 heatmap.drawAlpha(point.x, point.y, point.count);
-                if(!data[point.x])
+                if (!data[point.x])
                     data[point.x] = [];
 
-                if(!data[point.x][point.y])
+                if (!data[point.x][point.y])
                     data[point.x][point.y] = 0;
 
-                data[point.x][point.y]=point.count;
+                data[point.x][point.y] = point.count;
             }
             this.set("data", data);
         },
@@ -115,7 +115,7 @@
 
             return { max: me.max, data: exportData };
         },
-        generateRandomDataSet: function(points){
+        generateRandomDataSet: function(pointCount){
             var heatmap = this.get("heatmap"),
             w = heatmap.get("width"),
             h = heatmap.get("height");
@@ -123,9 +123,9 @@
             max = Math.floor(Math.random()*1000+1);
             randomset.max = max;
             var data = [];
-            while(points--){
+            while (pointCount--)
                 data.push({x: Math.floor(Math.random()*w+1), y: Math.floor(Math.random()*h+1), count: Math.floor(Math.random()*max+1)});
-            }
+
             randomset.data = data;
             this.setDataSet(randomset);
         }

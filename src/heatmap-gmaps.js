@@ -95,6 +95,44 @@ HeatmapOverlay.prototype.draw = function(){
     }
 }
 
+HeatmapOverlay.prototype.setDataSet = function(data){
+    var projection = this.getProjection();
+    var currentBounds = this.map.getBounds();
+
+    this.bounds = currentBounds;
+    
+    var ne = projection.fromLatLngToDivPixel(currentBounds.getNorthEast());
+    var sw = projection.fromLatLngToDivPixel(currentBounds.getSouthWest());
+    var topY = ne.y;
+    var leftX = sw.x
+    var h = sw.y - ne.y;
+    var w = ne.x - sw.x;
+    
+    var mapdata = {
+        max: data.max,
+        data: []
+    };
+    var d = data.data;
+    var dlen = d.length;
+
+    this.latlngs = [];
+   
+    while (dlen--) {	
+    	var latlng = new google.maps.LatLng(d[dlen].lat, d[dlen].lng);
+    	if (!currentBounds.contains(latlng)) { continue; }
+    	
+    	var divPixel = projection.fromLatLngToDivPixel(latlng);
+		var screenPixel = new google.maps.Point(divPixel.x - leftX, divPixel.y - topY);
+		var roundedPoint = this.pixelTransform(screenPixel);
+		
+    	this.latlngs.push({latlng: latlng, c: d[dlen].count});
+    	mapdata.data.push({x: roundedPoint.x, y: roundedPoint.y, count: d[dlen].count});
+    }
+    this.heatmap.clear();
+    this.heatmap.store.setDataSet(mapdata);
+
+}
+
 HeatmapOverlay.prototype.pixelTransform = function(p){
     var w = this.heatmap.get("width");
     var h = this.heatmap.get("height");
@@ -115,28 +153,6 @@ HeatmapOverlay.prototype.pixelTransform = function(p){
     p.y = (p.y >> 0);
 	
     return p;
-}
-
-HeatmapOverlay.prototype.setDataSet = function(data){
-    var mapdata = {
-        max: data.max,
-        data: []
-    };
-    var d = data.data;
-    var dlen = d.length;
-    var projection = this.getProjection();
-
-    this.latlngs = [];
-   
-    while (dlen--) {	
-    	var latlng = new google.maps.LatLng(d[dlen].lat, d[dlen].lng);
-    	this.latlngs.push({latlng: latlng, c: d[dlen].count});
-    	var point = this.pixelTransform(projection.fromLatLngToDivPixel(latlng));
-    	mapdata.data.push({x: point.x, y: point.y, count: d[dlen].count});
-    }
-    this.heatmap.clear();
-    this.heatmap.store.setDataSet(mapdata);
-
 }
 
 HeatmapOverlay.prototype.addDataPoint = function(lat, lng, count){

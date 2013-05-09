@@ -56,7 +56,13 @@
             
             me.set("data", data);
             // do we have a new maximum?
+<<<<<<< HEAD
+            if (me.max < data[x][y]) {
+
+                me.max = data[x][y];
+=======
             if(me.max < data[x][y]){
+>>>>>>> upstream/master
                 // max changed, we need to redraw all existing(lower) datapoints
                 heatmap.get("actx").clearRect(0,0,heatmap.get("width"),heatmap.get("height"));
                 me.setDataSet({ max: data[x][y], data: data }, true);
@@ -64,12 +70,22 @@
             }
             heatmap.drawAlpha(x, y, data[x][y], true);
         },
+<<<<<<< HEAD
+        
+        setDataSet: function(obj){
+            var me = this;
+			var heatmap = me.get("heatmap");
+			var data = [];
+			var d = obj.data;
+			var dlen = d.length;
+=======
         setDataSet: function(obj, internal){
             var me = this,
                 heatmap = me.get("heatmap"),
                 data = [],
                 d = obj.data,
                 dlen = d.length;
+>>>>>>> upstream/master
             // clear the heatmap before the data set gets drawn
             heatmap.clear();
             this.max = obj.max;
@@ -95,11 +111,24 @@
                     if(!data[point.x])
                         data[point.x] = [];
 
+<<<<<<< HEAD
+            while (dlen--) {
+                var point = d[dlen];
+                heatmap.drawAlpha(point.x, point.y, point.count);
+                if (!data[point.x])
+                    data[point.x] = [];
+
+                if (!data[point.x][point.y])
+                    data[point.x][point.y] = 0;
+
+                data[point.x][point.y] = point.count;
+=======
                     if(!data[point.x][point.y])
                         data[point.x][point.y] = 0;
 
                     data[point.x][point.y] = point.count;
                 }
+>>>>>>> upstream/master
             }
             heatmap.colorize();
             this.set("data", d);

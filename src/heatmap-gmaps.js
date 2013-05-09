@@ -15,7 +15,11 @@ function HeatmapOverlay(map, cfg){
 	me.bounds = null;
 	me.setMap(map);
   
+<<<<<<< HEAD
 	google.maps.event.addListener(map, 'idle', function() { me.draw() });
+=======
+  //google.maps.event.addListener(map, 'idle', function() { me.draw() });
+>>>>>>> upstream/master
 }
 
 HeatmapOverlay.prototype = new google.maps.OverlayView();
@@ -27,13 +31,8 @@ HeatmapOverlay.prototype.onAdd = function(){
     var h = this.getMap().getDiv().clientHeight;	
 	var el = document.createElement("div");
     
-    el.style.position = "absolute";
-    el.style.top = 0;
-    el.style.left = 0;
-    el.style.width = w + "px";
-    el.style.height = h + "px";
-    el.style.border = 0;
-	
+    el.style.cssText = "position:absolute;top:0;left:0;width:"+w+"px;height:"+h+"px;";
+    	
     this.conf.element = el;
     panes.overlayLayer.appendChild(el);
 
@@ -66,7 +65,7 @@ HeatmapOverlay.prototype.draw = function(){
     this.heatmap.store.get("heatmap").resize();
             
     if (this.latlngs.length > 0) {
-    	this.heatmap.clear();
+	   this.heatmap.clear();
     	
         var len = this.latlngs.length;
         var projection = this.getProjection();
@@ -115,7 +114,7 @@ HeatmapOverlay.prototype.setDataSet = function(data){
     var d = data.data;
     var dlen = d.length;
 
-    this.latlngs = [];
+    me.latlngs = [];
    
     while (dlen--) {	
     	var latlng = new google.maps.LatLng(d[dlen].lat, d[dlen].lng);
@@ -128,9 +127,8 @@ HeatmapOverlay.prototype.setDataSet = function(data){
     	this.latlngs.push({latlng: latlng, c: d[dlen].count});
     	mapdata.data.push({x: roundedPoint.x, y: roundedPoint.y, count: d[dlen].count});
     }
-    this.heatmap.clear();
-    this.heatmap.store.setDataSet(mapdata);
-
+    me.heatmap.clear();
+    me.heatmap.store.setDataSet(mapdata);
 }
 
 HeatmapOverlay.prototype.pixelTransform = function(p){

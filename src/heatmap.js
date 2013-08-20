@@ -64,6 +64,7 @@
             }
             heatmap.drawAlpha(x, y, data[x][y], true);
         },
+
         setDataSet: function(obj, internal){
             var me = this,
                 heatmap = me.get("heatmap"),
@@ -104,6 +105,7 @@
             heatmap.colorize();
             this.set("data", d);
         },
+
         exportDataSet: function(){
             var me = this,
                 data = me.get("data"),
@@ -123,6 +125,7 @@
 
             return { max: me.max, data: exportData };
         },
+        
         generateRandomDataSet: function(pointCount){
             var heatmap = this.get("heatmap"),
             w = heatmap.get("width"),

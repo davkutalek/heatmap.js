@@ -90,13 +90,13 @@
     /**
      * Inserts data into quadtree and redraws heatmap canvas
      */
-    setData: function(dataset) {
+    setData: function(dataset, data_max) {
         var self = this;
         var latLngs = [];
-        this._maxValue = 0;
+        this._maxValue = data_max/100;
         dataset.forEach(function(d) {
             latLngs.push(new L.LatLng(d.lat, d.lon));
-            self._maxValue = Math.max(self._maxValue, d.value);
+            // self._maxValue = Math.max(self._maxValue, d.value);
         });
         this._bounds = new L.LatLngBounds(latLngs);
 
@@ -186,6 +186,7 @@
             radiusValue = this.projectLatlngs(p);
         }
 
+        tile.innerHTML = "";
         var heatmap = h337.create({
             "radius": radiusValue,
             "element": tile,
